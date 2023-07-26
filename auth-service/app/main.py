@@ -10,7 +10,7 @@ def get_application():
         title=settings.APP_NAME,
         description=settings.description,
         debug=settings.debug,
-        openapi_url=f"{settings.API_PREFIX}/api/openapi.json",
+        openapi_url=f"{settings.API_PREFIX}/openapi.json",
         docs_url=f'{settings.API_PREFIX}/docs',
         redoc_url=f'{settings.API_PREFIX}/redoc',
     )

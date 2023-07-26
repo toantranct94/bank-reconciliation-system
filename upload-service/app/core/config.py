@@ -4,11 +4,15 @@ from typing import List, Union
 from pydantic import BaseSettings, validator
 
 
-
 class Settings(BaseSettings):
     APP_NAME: str
     BACKEND_CORS_ORIGINS: List[str] = ["*"]
-    API_PREFIX: str = "/api"
+    API_PREFIX: str = "/api/upload"
+    UPLOAD_FOLDER: str = "././uploads/"  # Make this outside of root folder
+    MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
+    MAX_READ_CHUNK_BYTES = 100 * 1024  # 100 KB
+    ALLOWED_EXTENSIONS = {"csv", "xlsx"}
+    amqp_url: str = "amqp://guest:guest@rabbitmq"
 
     description = """
         Description

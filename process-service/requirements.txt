@@ -1,0 +1,7 @@
+pydantic==1.10.11
+pika
+aio_pika
+psycopg2-binary
+pika
+aio_pika
+python-dotenv
