@@ -5,14 +5,13 @@ from app.models.schemas.token import Token
 from fastapi import HTTPException
 from fastapi.params import Depends
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from app.core.config import settings
 
 security = HTTPBasic()
 
+# just for test purposes
 CLIENT_ID = "client_id"
 CLIENT_SECRET = "client_secret"
-SECRET_KEY = "secret_key"
-TOKEN_EXPIRATION_TIME = 3600
-ALGORITHM = "HS256"
 
 
 def authenticate_client(credentials: HTTPBasicCredentials = Depends(security)):
@@ -24,12 +23,13 @@ def authenticate_client(credentials: HTTPBasicCredentials = Depends(security)):
             status_code=401, detail="Invalid client credentials")
 
 
-def generate_token(ttl: int = TOKEN_EXPIRATION_TIME) -> Token:
+def generate_token(ttl: int = settings.TOKEN_EXPIRATION_TIME) -> Token:
     payload = {
         "exp": datetime.datetime.utcnow() + datetime.timedelta(
             seconds=ttl),
     }
     token = {
-        "token": jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+        "token": jwt.encode(
+            payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     }
     return Token(**token)

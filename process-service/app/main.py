@@ -4,13 +4,12 @@ import logging
 import os
 
 from aio_pika import IncomingMessage
-from services.db import CsvToPostgresImporter
+from services.db import ImporterFactory
 from services.queue import QueueService
 
 queue_service = QueueService()
 
 logging.basicConfig(level=logging.INFO)
-importer = CsvToPostgresImporter()
 
 
 async def on_message(message: IncomingMessage):
@@ -19,7 +18,7 @@ async def on_message(message: IncomingMessage):
     logging.info(f"Received message: {file_path}")
     if os.path.exists(file_path):
         logging.info(f"Importing data from {file_path}")
-        importer.set_file(file_path)
+        importer = ImporterFactory(file_path)
         importer.import_data()
     else:
         logging.error("File not found")

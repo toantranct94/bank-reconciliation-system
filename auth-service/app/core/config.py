@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     APP_NAME: str
     BACKEND_CORS_ORIGINS: List[str] = ["*"]
     API_PREFIX: str = "/api/auth"
+    TOKEN_EXPIRATION_TIME = 3600
+    ALGORITHM = "HS256"
+    SECRET_KEY: str
 
     description = """
         Description

@@ -1,5 +1,6 @@
 import base64
 import os
+import time
 
 import psycopg2
 import pytest
@@ -93,7 +94,8 @@ def test_upload_files(access_token, folder):
 
 
 def test_get_transactions(db_connection):
-    # Call the function being tested
+    # Wait for the records to be inserted
+    time.sleep(5)
     cursor = db_connection.cursor()
     cursor.execute(f'SELECT COUNT(*) FROM {POSTGRES_TABLE};')
     count = cursor.fetchone()[0]

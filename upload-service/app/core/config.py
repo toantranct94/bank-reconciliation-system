@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
     MAX_READ_CHUNK_BYTES = 100 * 1024  # 100 KB
     ALLOWED_EXTENSIONS = {"csv", "xlsx"}
+    SECRET_KEY: str
+    ALGORITHM = "HS256"
     amqp_url: str = "amqp://guest:guest@rabbitmq"
 
     description = """

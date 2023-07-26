@@ -37,6 +37,14 @@ The upload-service will store the file and notify the process-service via Rabbit
 
 ![process architecture](./images/process-architecture.png)
 
+#### Principle & Practices
+
+- Deploy Nginx as an API Gateway
+
+- Use Docker to containerize the services
+
+- Use design patterns to build the services: singleton, decorator, and factory.
+
 #### Security practices
 
 - Authentication with JWT, the token will live for 1 hour.
@@ -55,6 +63,7 @@ TODO:
 
 - <input type="checkbox" disabled /> Check for vulnerabilities in files
 - <input type="checkbox" disabled /> Scan for malware
+- <input type="checkbox" disabled /> Integrate Authentication with API Gateway
 
 #### Code structure
 
@@ -203,7 +212,37 @@ Or
 
 ```
 chmod +x ./tests/test.sh
+
 ./tests/test.sh
 ```
 
 NOTE: The test script will take a long time to finish as it also generate dummy data.
+
+
+#### Resources
+
+##### Swagger UI
+
+Access to Swagger UI to view the APIs:
+
+[Upload APIs](http://localhost:8080/api/upload/docs)
+
+[Auth APIs](http://localhost:8080/api/auth/docs)
+
+##### pgAdmin UI
+
+Access to pgAdmin to view the database:
+
+```
+http://localhost:5050
+```
+
+- Username: `admin@admin.com`
+
+- Password: `root`
+
+#### Clean up
+
+```
+docker-compose down --volumes --rmi 'all'
+```

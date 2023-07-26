@@ -3,3 +3,7 @@ pika
 aio_pika
 psycopg2-binary
 python-dotenv
+pandas
+sqlalchemy
+xlrd
+openpyxl
