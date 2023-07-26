@@ -1,8 +1,15 @@
 FROM python:3.10.0-slim
+
 WORKDIR /code
+
 COPY ./requirements.txt /code/requirements.txt
+
 RUN apt-get update && apt-get install -y rabbitmq-server
+
 COPY ./.env /code/.env
+
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
 COPY ./app /code/app
-# COPY worker ./worker
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

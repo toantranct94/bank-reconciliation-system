@@ -3,4 +3,3 @@ uvicorn==0.15.0
 pydantic[email]
 python-dotenv
 PyJWT
-python-jose[cryptography]
