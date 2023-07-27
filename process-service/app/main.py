@@ -16,12 +16,14 @@ async def on_message(message: IncomingMessage):
     file_path = message.body.decode("utf-8")
     file_path = file_path.replace("././", "../")
     logging.info(f"Received message: {file_path}")
-    if os.path.exists(file_path):
-        logging.info(f"Importing data from {file_path}")
-        importer = ImporterFactory(file_path)
-        importer.import_data()
-    else:
+
+    if not os.path.exists(file_path):
         logging.error("File not found")
+        return
+
+    logging.info(f"Importing data from {file_path}")
+    importer = ImporterFactory(file_path)
+    importer.import_data()
 
 
 async def main():

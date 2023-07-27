@@ -6,8 +6,7 @@ from app.core.verify import verify_token
 from app.models.schemas.files import Folder
 from app.models.schemas.health import Health
 from app.service.file import create_folder, save_file
-from app.utils.helpers import (is_content_file_valid, is_file_size_valid,
-                               is_sumcheck_valid)
+from app.utils.helpers import is_upload_file_valid
 from fastapi import (APIRouter, BackgroundTasks, Depends, File, Header,
                      HTTPException, UploadFile, status)
 from fastapi.responses import JSONResponse
@@ -60,17 +59,7 @@ async def upload(
         raise HTTPException(
             status_code=400, detail="Folder is invalid")
 
-    # Need to improve this size check!
-    if not await is_file_size_valid(file):
-        raise HTTPException(
-            status_code=413, detail="File size exceeds the maximum limit"
-        )
-
-    if not is_content_file_valid(file):
-        raise HTTPException(
-            status_code=400, detail="Only CSV and Excel files are allowed")
-
-    if not await is_sumcheck_valid(file, x_md5_hash):
+    if not await is_upload_file_valid(file, x_md5_hash):
         raise HTTPException(
             status_code=400, detail="Upload failed.")
 

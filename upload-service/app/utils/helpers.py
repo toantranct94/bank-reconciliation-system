@@ -22,6 +22,30 @@ def generate_store_path(file: UploadFile, folder_path: str):
     return file_path
 
 
+async def is_upload_file_valid(file: UploadFile, sumcheck: str) -> bool:
+    md5, file_size = await calculate_md5_filesize(file)
+
+    if not is_content_file_valid(file):
+        return False
+    if not is_sumcheck_valid(md5, sumcheck):
+        return False
+    if not is_file_size_valid(file_size):
+        return False
+    return True
+
+
+async def calculate_md5_filesize(file: UploadFile):
+    # Calculate the MD5 hash of the file
+    md5_hash = hashlib.md5()
+    file_size = 0
+    while chunk := await file.read(4096):
+        md5_hash.update(chunk)
+        file_size += len(chunk)
+    await file.seek(0)
+
+    return md5_hash.hexdigest(), file_size
+
+
 def is_content_file_valid(file: UploadFile):
     file_extension = get_extension(file)
     if file_extension not in settings.ALLOWED_EXTENSIONS:
@@ -29,24 +53,15 @@ def is_content_file_valid(file: UploadFile):
     return True
 
 
-async def is_file_size_valid(file: UploadFile):
-    file.file.seek(0, 2)
-    file_size = file.file.tell()
-    # move the cursor back to the beginning
-    await file.seek(0)
-    logging.info(f"File size: {file_size}")
+def is_file_size_valid(file_size: int):
+    # file.file.seek(0, 2)
+    # file_size = file.file.tell()
+    # # move the cursor back to the beginning
+    # await file.seek(0)
+    # logging.info(f"File size: {file_size}")
     return file_size <= settings.MAX_FILE_SIZE_BYTES
 
 
-async def calculate_md5(file: UploadFile):
+def is_sumcheck_valid(md5_hash: str, sumcheck: str) -> bool:
     # Calculate the MD5 hash of the file
-    md5_hash = hashlib.md5()
-    while chunk := await file.read(4096):
-        md5_hash.update(chunk)
-    return md5_hash.hexdigest()
-
-
-async def is_sumcheck_valid(file: UploadFile, sumcheck: str) -> bool:
-    # Calculate the MD5 hash of the file
-    md5_hash = await calculate_md5(file)
     return md5_hash == sumcheck
