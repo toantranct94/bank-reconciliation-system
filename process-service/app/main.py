@@ -23,7 +23,10 @@ async def on_message(message: IncomingMessage):
 
     logging.info(f"Importing data from {file_path}")
     importer = ImporterFactory(file_path)
-    importer.import_data()
+    try:
+        importer.import_data()
+    except Exception:
+        logging.error("Error importing data", file_path)
 
 
 async def main():
