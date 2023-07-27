@@ -39,7 +39,9 @@ The upload-service will store the file and notify the process-service via Rabbit
 
 #### Principle & Practices
 
-- Deploy Nginx as an API Gateway
+- Deploy Nginx as an API Gateway & Load balancer
+
+- Replicate each service to 3 instances
 
 - Use Docker to containerize the services
 
