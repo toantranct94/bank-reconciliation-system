@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import os
 from functools import cache
@@ -34,4 +35,18 @@ async def is_file_size_valid(file: UploadFile):
     # move the cursor back to the beginning
     await file.seek(0)
     logging.info(f"File size: {file_size}")
-    return file_size > settings.MAX_FILE_SIZE_BYTES
+    return file_size <= settings.MAX_FILE_SIZE_BYTES
+
+
+async def calculate_md5(file: UploadFile):
+    # Calculate the MD5 hash of the file
+    md5_hash = hashlib.md5()
+    while chunk := await file.read(4096):
+        md5_hash.update(chunk)
+    return md5_hash.hexdigest()
+
+
+async def is_sumcheck_valid(file: UploadFile, sumcheck: str) -> bool:
+    # Calculate the MD5 hash of the file
+    md5_hash = await calculate_md5(file)
+    return md5_hash == sumcheck

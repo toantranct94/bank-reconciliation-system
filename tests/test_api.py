@@ -1,4 +1,5 @@
 import base64
+import hashlib
 import os
 import time
 
@@ -68,12 +69,30 @@ def get_csv_files(folder_path):
 
 
 def upload_csv_file(folder, token, file_path):
+    with open(file_path, 'rb') as file:
+        file_content = file.read()
+
+    # Calculate the MD5 hash of the file content
+    md5_checksum = hashlib.md5(file_content).hexdigest()
+
     # Upload a single CSV file using the API call
-    files = {'file': open(file_path, 'rb')}
-    headers = {'Authorization': f"Bearer {token}"}
+    files = {'file': (file_path, file_content)}
+    headers = {
+        'Authorization': f"Bearer {token}",
+        'X-MD5-Hash': md5_checksum  # Add the MD5 hash to the header
+    }
     response = requests.post(
         BASE_URL + f'upload/{folder}', files=files, headers=headers)
     return response
+
+
+def calculate_md5(file_path):
+    # Calculate the MD5 hash of the file
+    md5_hash = hashlib.md5()
+    with open(file_path, 'rb') as f:
+        for chunk in iter(lambda: f.read(4096), b''):
+            md5_hash.update(chunk)
+    return md5_hash.hexdigest()
 
 
 def test_token_retrieval(access_token):

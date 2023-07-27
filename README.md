@@ -51,6 +51,8 @@ The upload-service will store the file and notify the process-service via Rabbit
 
 - Input Validation: the server will validate the file, specifically the file size and the file type.
 
+- Sumcheck to verify the integrity of the file.
+
 - Renaming File: the server will rename the file with uuid to prevent the attacker from guessing the file name.
 
 - Store uploaded files outside the web root folder. The directory to which files are uploaded should be outside of the website’s public directory so that the attackers cannot execute the file via the assigned path URL.
@@ -65,7 +67,7 @@ TODO:
 - <input type="checkbox" disabled /> Scan for malware
 - <input type="checkbox" disabled /> Integrate Authentication with API Gateway
 
-#### Code structure
+#### Folder structure
 
 <pre>
 .
@@ -161,7 +163,7 @@ For Infrastucure:
 
 - Nginx: a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.
 
-For Coding:
+For Services:
 
 - aiopika: a pure-Python, thread-safe, asyncio-compatible AMQP client library.
 
@@ -218,6 +220,36 @@ chmod +x ./tests/test.sh
 
 NOTE: The test script will take a long time to finish as it also generate dummy data.
 
+CURL command to test the APIs:
+
+Get access token
+
+```
+curl --location --request POST 'http://localhost:8080/api/auth/token' \
+--header 'accept: application/json' \
+--header 'Authorization: Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ='
+```
+
+Create folder to upload files
+
+```
+curl --location --request POST 'http://localhost:8080/api/upload' \
+--header 'accept: application/json' \
+--header 'Authorization: Bearer :token'
+```
+
+
+Upload files
+```
+curl --location 'http://localhost:8080/api/upload/:folder' \
+--header 'accept: application/json' \
+--header 'Authorization: Bearer  :token' \
+--form 'file=@"file-path"'
+```
+
+Other way to test the APIs is using Postman. You can import the collection from `postman/collection.json` to Postman.
+
+Create a new environment and the variables like `token`, `folder` will be set as you can the APIs.
 
 #### Resources
 

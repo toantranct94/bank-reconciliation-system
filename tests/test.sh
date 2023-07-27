@@ -44,10 +44,13 @@ fi
 upload_endpoint="$upload_base_endpoint$folder_name"
 
 for file in "$csv_folder"/*.csv; do
-    echo -e "Uploading file: $file  \n"
+    echo -e "Uploading file: $file"
+    md5_hash=$(openssl md5 -binary "$file" | xxd -p)
+    echo "MD5 hash: $md5_hash"
     curl --location "$upload_endpoint" \
-         --header 'accept: application/json' \
+         --header "accept: application/json" \
          --header "Authorization: Bearer $token" \
+         --header "X-MD5-Hash: $md5_hash" \
          --form "file=@\"$file\""
     echo -e "File upload complete: $file \n"
 done
