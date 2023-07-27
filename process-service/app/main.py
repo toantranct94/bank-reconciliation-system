@@ -31,7 +31,7 @@ async def on_message(message: IncomingMessage):
 
 async def main():
     await queue_service.connect()
-    queue = await queue_service.channel.declare_queue("pgdb", exclusive=True)
+    queue = await queue_service.channel.declare_queue("pgdb")
     await queue.consume(on_message)
 
 

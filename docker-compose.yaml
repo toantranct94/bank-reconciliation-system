@@ -49,10 +49,12 @@ services:
     env_file:
       - ./upload-service/.env
     ports:
-      - "8001:8000"
+      - "8001-8004:8000"
     depends_on:
       - auth-service
       - rabbitmq
+    deploy:
+      replicas: 3
 
   process-service:
     build: ./process-service
@@ -62,6 +64,8 @@ services:
       - ./process-service/.env
     depends_on:
       - rabbitmq
+    deploy:
+      replicas: 3
 
   auth-service:
     build: ./auth-service
@@ -71,7 +75,9 @@ services:
     env_file:
       - ./auth-service/.env
     ports:
-      - "8002:8000"
+      - "8005-8008:8000"
+    deploy:
+      replicas: 3
 
 volumes:
   shared_volume:
