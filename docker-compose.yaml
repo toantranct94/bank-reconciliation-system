@@ -49,7 +49,7 @@ services:
     env_file:
       - ./upload-service/.env
     ports:
-      - "8001-8004:8000"
+      - "8001-8005:8000"
     depends_on:
       - auth-service
       - rabbitmq
@@ -75,7 +75,7 @@ services:
     env_file:
       - ./auth-service/.env
     ports:
-      - "8005-8008:8000"
+      - "8006-8010:8000"
     deploy:
       replicas: 3
 

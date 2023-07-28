@@ -23,6 +23,7 @@ class QueueService():
         for attempt in range(self.retry_attempts):
             try:
                 self.connection = await connect(self.amqp_url)
+                break
             except AMQPConnectionError:
                 logging.error(
                     (f"Connection attempt {attempt + 1} failed."
